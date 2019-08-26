@@ -36,7 +36,7 @@ namespace SmartSaves
 #if UNITY_EDITOR
         public static Settings Instance { get { if (!instance) Instanciate(); return instance; } }
 #else
-        public static SmartSavesSettings Instance { get { return instance; } }
+        public static Settings Instance { get { return instance; } }
 #endif
 
         [SerializeField]
