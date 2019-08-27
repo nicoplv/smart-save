@@ -89,9 +89,9 @@ namespace SmartSaves
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         private static void OnBeforeSceneLoad()
         {
-            instance = Resources.Load<T>(assetName + ".asset");
+            instance = Resources.Load<Settings>(assetName + ".asset");
             if (!instance)
-                instance = CreateInstance<T>();
+                instance = CreateInstance<Settings>();
         }
 #endif
 
