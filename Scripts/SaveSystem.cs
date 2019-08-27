@@ -6,7 +6,9 @@ namespace SmartSaves
     {
         Text,
         Binary,
-        BinaryAndChecksum
+        BinaryChecksum,
+        BinaryShuffled,
+        BinaryShuffledChecksum,
     }
 
     #endregion
@@ -30,27 +32,18 @@ namespace SmartSaves
 
         #region Methods
 
-        //public static SaveSystem<T> Create(Data<T> _data)
-        //{
-        //    switch (Settings.Instance.SaveType)
-        //    {
-        //        case SaveTypes.Binary:
-        //            return new SaveSystems.PersistentDataPathFileBinary<T>(_data);
-        //        case SaveTypes.BinaryAndChecksum:
-        //            return new SaveSystems.PersistentDataPathFileBinaryChecksum<T>(_data);
-        //        default:
-        //            return new SaveSystems.PersistentDataPathFileText<T>(_data);
-        //    }
-        //}
-
         public static SaveSystem<T> Create(Data<T> _data, SaveTypes _saveType)
         {
             switch (_saveType)
             {
                 case SaveTypes.Binary:
                     return new SaveSystems.PersistentDataPathFileBinary<T>(_data);
-                case SaveTypes.BinaryAndChecksum:
+                case SaveTypes.BinaryChecksum:
                     return new SaveSystems.PersistentDataPathFileBinaryChecksum<T>(_data);
+                case SaveTypes.BinaryShuffled:
+                    return new SaveSystems.PersistentDataPathFileBinaryShuffled<T>(_data);
+                case SaveTypes.BinaryShuffledChecksum:
+                    return new SaveSystems.PersistentDataPathFileBinaryShuffledChecksum<T>(_data);
                 default:
                     return new SaveSystems.PersistentDataPathFileText<T>(_data);
             }

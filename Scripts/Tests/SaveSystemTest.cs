@@ -46,11 +46,39 @@ namespace Tests
         public void PersistentDataPathFileBinaryChecksum()
         {
             float randomNumber = Random.value;
-            DataTest dataTestSave = DataTest.Create("DataTest_BinaryAndChecksum", SmartSaves.SaveTypes.BinaryAndChecksum);
+            DataTest dataTestSave = DataTest.Create("DataTest_BinaryAndChecksum", SmartSaves.SaveTypes.BinaryChecksum);
             dataTestSave.VarTest = randomNumber;
             dataTestSave.Save();
 
-            DataTest dataTestLoad = DataTest.Create("DataTest_BinaryAndChecksum", SmartSaves.SaveTypes.BinaryAndChecksum);
+            DataTest dataTestLoad = DataTest.Create("DataTest_BinaryAndChecksum", SmartSaves.SaveTypes.BinaryChecksum);
+            dataTestLoad.Load();
+
+            Assert.AreEqual(dataTestLoad.VarTest, randomNumber);
+        }
+
+        [Test]
+        public void PersistentDataPathFileBinaryShuffled()
+        {
+            float randomNumber = Random.value;
+            DataTest dataTestSave = DataTest.Create("DataTest_Shuffled", SmartSaves.SaveTypes.BinaryShuffled);
+            dataTestSave.VarTest = randomNumber;
+            dataTestSave.Save();
+
+            DataTest dataTestLoad = DataTest.Create("DataTest_Shuffled", SmartSaves.SaveTypes.BinaryShuffled);
+            dataTestLoad.Load();
+
+            Assert.AreEqual(dataTestLoad.VarTest, randomNumber);
+        }
+
+        [Test]
+        public void PersistentDataPathFileBinaryShuffledChecksum()
+        {
+            float randomNumber = Random.value;
+            DataTest dataTestSave = DataTest.Create("DataTest_ShuffledChecksum", SmartSaves.SaveTypes.BinaryShuffledChecksum);
+            dataTestSave.VarTest = randomNumber;
+            dataTestSave.Save();
+
+            DataTest dataTestLoad = DataTest.Create("DataTest_ShuffledChecksum", SmartSaves.SaveTypes.BinaryShuffledChecksum);
             dataTestLoad.Load();
 
             Assert.AreEqual(dataTestLoad.VarTest, randomNumber);

@@ -1,10 +1,11 @@
 using UnityEngine;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using System;
 
 namespace SmartSaves.SaveSystems
 {
-    public class PersistentDataPathFileBinaryChecksum<T> : SaveSystem<T> where T : Data<T>
+    public class PersistentDataPathFileBinaryShuffledChecksum<T> : SaveSystem<T> where T : Data<T>
     {
         #region Variables
 
@@ -15,7 +16,7 @@ namespace SmartSaves.SaveSystems
 
         #region Constructor
 
-        public PersistentDataPathFileBinaryChecksum(Data<T> _data) : base(_data)
+        public PersistentDataPathFileBinaryShuffledChecksum(Data<T> _data) : base(_data)
         {
             fileName = _data.name;
             filePath = Application.persistentDataPath + "/" + fileName + ".save";
@@ -28,13 +29,18 @@ namespace SmartSaves.SaveSystems
         public override void Save()
         {
             string dataJson = JsonUtility.ToJson(data);
+
+            // Shuffle data
+            int key = UnityEngine.Random.Range(0, 1000);
+            dataJson = Utils.Shuffle(dataJson, key);
             string md5Sum = Utils.Md5Sum(dataJson);
-            string fileData = dataJson + md5Sum;
+            dataJson = key.ToString("000") + dataJson + md5Sum;
+
             try
             {
                 BinaryFormatter binaryFormatter = new BinaryFormatter();
                 FileStream fileStream = File.Create(filePath);
-                binaryFormatter.Serialize(fileStream, fileData);
+                binaryFormatter.Serialize(fileStream, dataJson);
                 fileStream.Close();
             }
             catch
@@ -51,17 +57,21 @@ namespace SmartSaves.SaveSystems
                 {
                     BinaryFormatter binaryFormatter = new BinaryFormatter();
                     FileStream fileStream = File.Open(filePath, FileMode.Open);
-                    string fileData = (string)binaryFormatter.Deserialize(fileStream);
+                    string dataJson = (string)binaryFormatter.Deserialize(fileStream);
                     fileStream.Close();
-                    string dataJson = fileData.Substring(0, fileData.Length - 32);
-                    string md5Sum = fileData.Substring(fileData.Length - 32, 32);
 
-                    if(Utils.Md5Sum(dataJson) != md5Sum)
+                    // Unshuffle data
+                    int key = int.Parse(dataJson.Substring(0, 3));
+                    string md5Sum = dataJson.Substring(dataJson.Length - 32, 32);
+                    dataJson = dataJson.Substring(3, dataJson.Length - 32 - 3);
+
+                    if (Utils.Md5Sum(dataJson) != md5Sum)
                     {
                         Debug.Log("Save as been changed !");
                         return;
                     }
 
+                    dataJson = Utils.Unshuffle(dataJson, key);
                     JsonUtility.FromJsonOverwrite(dataJson, data);
                 }
                 catch

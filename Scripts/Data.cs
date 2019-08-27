@@ -14,10 +14,6 @@ namespace SmartSaves
 
         public static T Create(string _name)
         {
-            //T b_data = CreateInstance<T>();
-            //b_data.name = _name;
-            //b_data.saveSystem = SaveSystem<T>.Create(b_data);
-            //return b_data;
             return Create(_name, Settings.Instance.SaveType);
         }
 
@@ -31,9 +27,6 @@ namespace SmartSaves
 
         public static T Duplicate(T _original, string _name)
         {
-            //_original.name = _name;
-            //_original.saveSystem = SaveSystem<T>.Create(_original);
-            //return _original;
             return Duplicate(_original, _name, Settings.Instance.SaveType);
         }
 

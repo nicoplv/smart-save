@@ -40,7 +40,7 @@ namespace SmartSaves
 #endif
 
         [SerializeField]
-        private SaveTypes saveType = SaveTypes.BinaryAndChecksum;
+        private SaveTypes saveType = SaveTypes.BinaryChecksum;
         public SaveTypes SaveType { get { return saveType; } }
 
         #endregion
