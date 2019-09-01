@@ -39,9 +39,9 @@ namespace SmartSaves
         public static Settings Instance { get { return instance; } }
 #endif
 
-        [SerializeField]
-        private SaveTypes saveType = SaveTypes.BinaryChecksum;
-        public SaveTypes SaveType { get { return saveType; } }
+        //[SerializeField]
+        //private SaveTypes saveType = SaveTypes.BinaryChecksum;
+        //public SaveTypes SaveType { get { return saveType; } }
 
         #endregion
 

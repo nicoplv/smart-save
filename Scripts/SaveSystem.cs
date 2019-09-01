@@ -1,17 +1,9 @@
 namespace SmartSaves
 {
-    #region Enums
-
-    public enum SaveTypes
+    public abstract class SaveSystemConfig
     {
-        Text,
-        Binary,
-        BinaryChecksum,
-        BinaryShuffled,
-        BinaryShuffledChecksum,
-    }
 
-    #endregion
+    }
 
     public abstract class SaveSystem<T> where T : Data<T>
     {
@@ -23,7 +15,7 @@ namespace SmartSaves
 
         #region Constructor
 
-        public SaveSystem(Data<T> _data)
+        public SaveSystem(Data<T> _data, SaveSystemConfig _config)
         {
             data = _data;
         }
@@ -32,28 +24,11 @@ namespace SmartSaves
 
         #region Methods
 
-        public static SaveSystem<T> Create(Data<T> _data, SaveTypes _saveType)
-        {
-            switch (_saveType)
-            {
-                case SaveTypes.Binary:
-                    return new SaveSystems.PersistentDataPathFileBinary<T>(_data);
-                case SaveTypes.BinaryChecksum:
-                    return new SaveSystems.PersistentDataPathFileBinaryChecksum<T>(_data);
-                case SaveTypes.BinaryShuffled:
-                    return new SaveSystems.PersistentDataPathFileBinaryShuffled<T>(_data);
-                case SaveTypes.BinaryShuffledChecksum:
-                    return new SaveSystems.PersistentDataPathFileBinaryShuffledChecksum<T>(_data);
-                default:
-                    return new SaveSystems.PersistentDataPathFileText<T>(_data);
-            }
-        }
-
         public abstract void Save();
         public abstract void Load();
         public abstract void Unload();
         public abstract void Delete();
 
-#endregion
+        #endregion
     }
 }

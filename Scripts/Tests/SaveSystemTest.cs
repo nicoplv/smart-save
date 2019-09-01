@@ -18,11 +18,11 @@ namespace Tests
         public void PersistentDataPathFileText()
         {
             float randomNumber = Random.value;
-            DataTest dataTestSave = DataTest.Create("DataTest_Text", SmartSaves.SaveTypes.Text);
+            DataTest dataTestSave = DataTest.Create<SmartSaves.SaveSystems.PersistentDataPathFile<DataTest>>("DataTest_Text", new SmartSaves.SaveSystems.PersistentDataPathFileConfig(binary: false));
             dataTestSave.VarTest = randomNumber;
             dataTestSave.Save();
 
-            DataTest dataTestLoad = DataTest.Create("DataTest_Text", SmartSaves.SaveTypes.Text);
+            DataTest dataTestLoad = DataTest.Create<SmartSaves.SaveSystems.PersistentDataPathFile<DataTest>>("DataTest_Text", new SmartSaves.SaveSystems.PersistentDataPathFileConfig(binary: false));
             dataTestLoad.Load();
 
             Assert.AreEqual(dataTestLoad.VarTest, randomNumber);
@@ -32,53 +32,67 @@ namespace Tests
         public void PersistentDataPathFileBinary()
         {
             float randomNumber = Random.value;
-            DataTest dataTestSave = DataTest.Create("DataTest_Binary", SmartSaves.SaveTypes.Binary);
+            DataTest dataTestSave = DataTest.Create<SmartSaves.SaveSystems.PersistentDataPathFile<DataTest>>("DataTest_Binary", new SmartSaves.SaveSystems.PersistentDataPathFileConfig(binary: true));
             dataTestSave.VarTest = randomNumber;
             dataTestSave.Save();
 
-            DataTest dataTestLoad = DataTest.Create("DataTest_Binary", SmartSaves.SaveTypes.Binary);
+            DataTest dataTestLoad = DataTest.Create<SmartSaves.SaveSystems.PersistentDataPathFile<DataTest>>("DataTest_Binary", new SmartSaves.SaveSystems.PersistentDataPathFileConfig(binary: true));
             dataTestLoad.Load();
 
             Assert.AreEqual(dataTestLoad.VarTest, randomNumber);
         }
 
         [Test]
-        public void PersistentDataPathFileBinaryChecksum()
+        public void PersistentDataPathFileChecksum()
         {
             float randomNumber = Random.value;
-            DataTest dataTestSave = DataTest.Create("DataTest_BinaryAndChecksum", SmartSaves.SaveTypes.BinaryChecksum);
+            DataTest dataTestSave = DataTest.Create<SmartSaves.SaveSystems.PersistentDataPathFile<DataTest>>("DataTest_Checksum", new SmartSaves.SaveSystems.PersistentDataPathFileConfig(checksum: true));
             dataTestSave.VarTest = randomNumber;
             dataTestSave.Save();
 
-            DataTest dataTestLoad = DataTest.Create("DataTest_BinaryAndChecksum", SmartSaves.SaveTypes.BinaryChecksum);
+            DataTest dataTestLoad = DataTest.Create<SmartSaves.SaveSystems.PersistentDataPathFile<DataTest>>("DataTest_Checksum", new SmartSaves.SaveSystems.PersistentDataPathFileConfig(checksum: true));
             dataTestLoad.Load();
 
             Assert.AreEqual(dataTestLoad.VarTest, randomNumber);
         }
 
         [Test]
-        public void PersistentDataPathFileBinaryShuffled()
+        public void PersistentDataPathFileShuffledRandom()
         {
             float randomNumber = Random.value;
-            DataTest dataTestSave = DataTest.Create("DataTest_Shuffled", SmartSaves.SaveTypes.BinaryShuffled);
+            DataTest dataTestSave = DataTest.Create<SmartSaves.SaveSystems.PersistentDataPathFile<DataTest>>("DataTest_ShuffledRandom", new SmartSaves.SaveSystems.PersistentDataPathFileConfig(shuffle: SmartSaves.SaveSystems.PersistentDataPathFileConfig.ShuffleTypes.Random));
             dataTestSave.VarTest = randomNumber;
             dataTestSave.Save();
 
-            DataTest dataTestLoad = DataTest.Create("DataTest_Shuffled", SmartSaves.SaveTypes.BinaryShuffled);
+            DataTest dataTestLoad = DataTest.Create<SmartSaves.SaveSystems.PersistentDataPathFile<DataTest>>("DataTest_ShuffledRandom", new SmartSaves.SaveSystems.PersistentDataPathFileConfig(shuffle: SmartSaves.SaveSystems.PersistentDataPathFileConfig.ShuffleTypes.Random));
             dataTestLoad.Load();
 
             Assert.AreEqual(dataTestLoad.VarTest, randomNumber);
         }
 
         [Test]
-        public void PersistentDataPathFileBinaryShuffledChecksum()
+        public void PersistentDataPathFileShuffledDeviceId()
         {
             float randomNumber = Random.value;
-            DataTest dataTestSave = DataTest.Create("DataTest_ShuffledChecksum", SmartSaves.SaveTypes.BinaryShuffledChecksum);
+            DataTest dataTestSave = DataTest.Create<SmartSaves.SaveSystems.PersistentDataPathFile<DataTest>>("DataTest_ShuffledDeviceId", new SmartSaves.SaveSystems.PersistentDataPathFileConfig(shuffle: SmartSaves.SaveSystems.PersistentDataPathFileConfig.ShuffleTypes.DeviceId));
             dataTestSave.VarTest = randomNumber;
             dataTestSave.Save();
 
-            DataTest dataTestLoad = DataTest.Create("DataTest_ShuffledChecksum", SmartSaves.SaveTypes.BinaryShuffledChecksum);
+            DataTest dataTestLoad = DataTest.Create<SmartSaves.SaveSystems.PersistentDataPathFile<DataTest>>("DataTest_ShuffledDeviceId", new SmartSaves.SaveSystems.PersistentDataPathFileConfig(shuffle: SmartSaves.SaveSystems.PersistentDataPathFileConfig.ShuffleTypes.DeviceId));
+            dataTestLoad.Load();
+
+            Assert.AreEqual(dataTestLoad.VarTest, randomNumber);
+        }
+
+        [Test]
+        public void PersistentDataPathFileAll()
+        {
+            float randomNumber = Random.value;
+            DataTest dataTestSave = DataTest.Create<SmartSaves.SaveSystems.PersistentDataPathFile<DataTest>>("DataTest_All", new SmartSaves.SaveSystems.PersistentDataPathFileConfig(binary: true, checksum: true, shuffle: SmartSaves.SaveSystems.PersistentDataPathFileConfig.ShuffleTypes.DeviceId));
+            dataTestSave.VarTest = randomNumber;
+            dataTestSave.Save();
+
+            DataTest dataTestLoad = DataTest.Create<SmartSaves.SaveSystems.PersistentDataPathFile<DataTest>>("DataTest_All", new SmartSaves.SaveSystems.PersistentDataPathFileConfig(binary: true, checksum: true, shuffle: SmartSaves.SaveSystems.PersistentDataPathFileConfig.ShuffleTypes.DeviceId));
             dataTestLoad.Load();
 
             Assert.AreEqual(dataTestLoad.VarTest, randomNumber);

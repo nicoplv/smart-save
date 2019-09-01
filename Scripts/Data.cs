@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace SmartSaves
@@ -12,28 +13,38 @@ namespace SmartSaves
 
         #region Methods
 
-        public static T Create(string _name)
+        public static T Create(string _name, SaveSystemConfig _config = null)
         {
-            return Create(_name, Settings.Instance.SaveType);
+            return Create<SaveSystems.PersistentDataPathFile<T>>(_name, _config);
         }
 
-        public static T Create(string _name, SaveTypes _saveType)
+        public static T Create<S>(string _name, SaveSystemConfig _config = null) where S : SaveSystem<T>
+        {
+            return Create(typeof(S), _name, _config);
+        }
+
+        public static T Create(Type _type, string _name, SaveSystemConfig _config = null)
         {
             T b_data = CreateInstance<T>();
             b_data.name = _name;
-            b_data.saveSystem = SaveSystem<T>.Create(b_data, _saveType);
+            b_data.saveSystem = (SaveSystem<T>)(_type.GetConstructor(new[] { typeof(T), typeof(SaveSystemConfig) }).Invoke(new object[] { b_data, _config }));
             return b_data;
         }
 
         public static T Duplicate(T _original, string _name)
         {
-            return Duplicate(_original, _name, Settings.Instance.SaveType);
+            return Duplicate(_original.saveSystem.GetType(), _original, _name);
         }
 
-        public static T Duplicate(T _original, string _name, SaveTypes _saveType)
+        public static T Duplicate<S>(T _original, string _name) where S : SaveSystem<T>
+        {
+            return Duplicate(typeof(S), _original, _name);
+        }
+
+        public static T Duplicate(Type _type, T _original, string _name)
         {
             _original.name = _name;
-            _original.saveSystem = SaveSystem<T>.Create(_original, _saveType);
+            _original.saveSystem = (SaveSystem<T>)(_type.GetConstructor(new[] { typeof(T) }).Invoke(new object[] { _original }));
             return _original;
         }
 
