@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace SmartSaves
+namespace SmartSaves.SaveSystems
 {
     public static class Utils
     {

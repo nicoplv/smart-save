@@ -4,44 +4,6 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 namespace SmartSaves.SaveSystems
 {
-    public class PersistentDataPathFileConfig : SaveSystemConfig
-    {
-        #region Enums
-
-        public enum ShuffleTypes
-        {
-            None,
-            Random,
-            DeviceId,
-        }
-
-        #endregion
-
-        #region Variables
-
-        private bool binary = false;
-        public bool Binary { get { return binary; } }
-
-        private bool checksum = false;
-        public bool Checksum { get { return checksum; } }
-
-        private ShuffleTypes shuffle = ShuffleTypes.None;
-        public ShuffleTypes Shuffle { get { return shuffle; } }
-
-        #endregion
-
-        #region Constructor
-
-        public PersistentDataPathFileConfig(bool binary = false, bool checksum = false, ShuffleTypes shuffle = ShuffleTypes.None)
-        {
-            this.binary = binary;
-            this.checksum = checksum;
-            this.shuffle = shuffle;
-        }
-
-        #endregion
-    }
-
     public class PersistentDataPathFile<T> : SaveSystem<T> where T : Data<T>
     {
         #region Variables
@@ -49,21 +11,17 @@ namespace SmartSaves.SaveSystems
         private string fileName;
         private string filePath;
 
-        private PersistentDataPathFileConfig config;
+        private Config config;
 
         #endregion
 
         #region Constructor
 
-        public PersistentDataPathFile(Data<T> _data, SaveSystemConfig _config) : base(_data, _config)
+        public PersistentDataPathFile(Data<T> _data, Config _config) : base(_data, _config)
         {
             fileName = _data.name;
             filePath = Application.persistentDataPath + "/" + fileName + ".save";
-
-            if (_config.GetType() == typeof(PersistentDataPathFileConfig))
-                config = (PersistentDataPathFileConfig)_config;
-            else
-                config = new PersistentDataPathFileConfig();
+            config = _config;
         }
 
         #endregion
@@ -76,21 +34,21 @@ namespace SmartSaves.SaveSystems
             string dataJson = JsonUtility.ToJson(data, true);
 
             // Shuffle
-            switch (config.Shuffle)
+            switch (config.PersistentDataPathFileShuffle)
             {
-                case PersistentDataPathFileConfig.ShuffleTypes.Random:
+                case Config.PersistentDataPathFileShuffleTypes.Random:
                     int keyRandom = UnityEngine.Random.Range(0, 1000);
                     dataJson = Utils.Shuffle(dataJson, keyRandom);
                     dataJson += keyRandom.ToString("000");
                     break;
-                case PersistentDataPathFileConfig.ShuffleTypes.DeviceId:
+                case Config.PersistentDataPathFileShuffleTypes.DeviceId:
                     int keyDeviceId = SystemInfo.deviceUniqueIdentifier.GetHashCode();
                     dataJson = Utils.Shuffle(dataJson, keyDeviceId);
                     break;
             }
 
             // Add checksum
-            if(config.Checksum)
+            if(config.PersistentDataPathFileChecksum)
             {
                 string md5Sum = Utils.Md5Sum(dataJson);
                 dataJson += md5Sum;
@@ -98,7 +56,7 @@ namespace SmartSaves.SaveSystems
 
             try
             {
-                if(!config.Binary)
+                if(!config.PersistentDataPathFileBinary)
                 {
                     // Write on file normally
                     File.WriteAllText(filePath, dataJson);
@@ -125,7 +83,7 @@ namespace SmartSaves.SaveSystems
                 try
                 {
                     string dataJson = "";
-                    if (!config.Binary)
+                    if (!config.PersistentDataPathFileBinary)
                     {
                         // Read on file normally
                         dataJson = File.ReadAllText(filePath);
@@ -140,7 +98,7 @@ namespace SmartSaves.SaveSystems
                     }
 
                     // Check checksum
-                    if(config.Checksum)
+                    if(config.PersistentDataPathFileChecksum)
                     {
                         string md5Sum = dataJson.Substring(dataJson.Length - 32, 32);
                         dataJson = dataJson.Substring(0, dataJson.Length - 32);
@@ -153,14 +111,14 @@ namespace SmartSaves.SaveSystems
                     }
 
                     // Unshuffle
-                    switch (config.Shuffle)
+                    switch (config.PersistentDataPathFileShuffle)
                     {
-                        case PersistentDataPathFileConfig.ShuffleTypes.Random:
+                        case Config.PersistentDataPathFileShuffleTypes.Random:
                             int keyRandom = int.Parse(dataJson.Substring(dataJson.Length - 3, 3));
                             dataJson = dataJson.Substring(0, dataJson.Length - 3);
                             dataJson = Utils.Unshuffle(dataJson, keyRandom);
                             break;
-                        case PersistentDataPathFileConfig.ShuffleTypes.DeviceId:
+                        case Config.PersistentDataPathFileShuffleTypes.DeviceId:
                             int keyDeviceId = SystemInfo.deviceUniqueIdentifier.GetHashCode();
                             dataJson = Utils.Unshuffle(dataJson, keyDeviceId);
                             break;

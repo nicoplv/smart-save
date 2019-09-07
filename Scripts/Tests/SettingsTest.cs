@@ -11,7 +11,7 @@ namespace Tests
         [Test]
         public void Settings_InstanceExist()
         {
-            Assert.IsInstanceOf<SmartSaves.Settings>(SmartSaves.Settings.Instance);
+            Assert.IsInstanceOf<SmartSaves.Settings.Setting>(SmartSaves.Settings.Setting.Instance);
         }
     }
 }

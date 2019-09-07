@@ -26,19 +26,27 @@ MySaveClass mySaveClass = MySaveClass.Create("NameOfTheSaveFile");
 mySaveClass.Load();
 ```
 
-You can do all the modifications you want in your object after
+You do all the modifications you want in your object
 ```C#
 mySaveClass.MyVarToSave = "NewValue";
 mySaveClass.SetMyPrivateVarToSave("NewValue");
 ```
 
-But don't forget to save all the modifications after
+And don't forget to save all the modifications at the end
 ```C#
 mySaveClass.Save();
 ```
 
 ## Settings
-You can change the type of save by modifying the SaveType variable in SmartSave/Resources/SmartSaveSettings.asset
-- Text : will save your data in text
-- Binary : will save your data in binary
-- Binary And Checksum : will save your data in binary and add a check sum at the end to be sure the save file has not been edited
+You can change the type of save by modifying SmartSave/Resources/SmartSaveSettings.asset:
+- Create a new config with the +
+- Select the platform who use this config
+- Choose the type system (currently the only one proposed is Persistent data path file, but you can write your own one)
+- Set settings of the system like if if the file is write in binary, protected with a checksum, ...
+
+## Advanced Usage
+When you create a save with a different config than the one on your settings, you just have to add a configuration when you create it
+```C#
+MySaveClass mySaveClass = MySaveClass.Create("NameOfTheSaveFile", SmartSaves.SaveSystems.Config.ForPersistentDataPathFile<MySaveClass>(binary: true, checksum: true, shuffle: SmartSaves.SaveSystems.Config.PersistentDataPathFileShuffleTypes.Random));
+mySaveClass.Load();
+```

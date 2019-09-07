@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using SmartSaves.SaveSystems;
 
 namespace SmartSaves
 {
@@ -13,21 +14,31 @@ namespace SmartSaves
 
         #region Methods
 
-        public static T Create(string _name, SaveSystemConfig _config = null)
+        public static T Create(string _name)
         {
-            return Create<SaveSystems.PersistentDataPathFile<T>>(_name, _config);
+#if UNITY_EDITOR
+            Settings.Setting.SettingConfig settingConfig = Settings.Setting.Instance.EditorGetBuildTargetConfig(UnityEditor.EditorUserBuildSettings.activeBuildTarget);
+#else
+            Settings.Setting.SettingConfig settingConfig = Settings.Setting.Instance.Config;
+#endif
+            return Create(settingConfig.SaveSystemType.GetSaveSystemType<T>(), _name, settingConfig.SaveSystemConfig);
         }
 
-        public static T Create<S>(string _name, SaveSystemConfig _config = null) where S : SaveSystem<T>
+        public static T Create(string _name, Config _config)
         {
-            return Create(typeof(S), _name, _config);
+            return Create(_config.ConfigType, _name, _config);
         }
 
-        public static T Create(Type _type, string _name, SaveSystemConfig _config = null)
+        //public static T Create<S>(string _name, Config _config = null) where S : SaveSystem<T>
+        //{
+        //    return Create(typeof(S), _name, _config);
+        //}
+
+        public static T Create(Type _type, string _name, Config _config = null)
         {
             T b_data = CreateInstance<T>();
             b_data.name = _name;
-            b_data.saveSystem = (SaveSystem<T>)(_type.GetConstructor(new[] { typeof(T), typeof(SaveSystemConfig) }).Invoke(new object[] { b_data, _config }));
+            b_data.saveSystem = (SaveSystem<T>)(_type.GetConstructor(new[] { typeof(T), typeof(Config) }).Invoke(new object[] { b_data, _config }));
             return b_data;
         }
 
@@ -89,6 +100,6 @@ namespace SmartSaves
         protected virtual void OnBeforeDelete() { }
         protected virtual void OnAfterDelete() { }
 
-        #endregion
+#endregion
     }
 }

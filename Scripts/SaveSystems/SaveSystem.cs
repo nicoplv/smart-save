@@ -1,10 +1,8 @@
-namespace SmartSaves
+using System;
+using UnityEngine;
+
+namespace SmartSaves.SaveSystems
 {
-    public abstract class SaveSystemConfig
-    {
-
-    }
-
     public abstract class SaveSystem<T> where T : Data<T>
     {
         #region Variables
@@ -15,7 +13,7 @@ namespace SmartSaves
 
         #region Constructor
 
-        public SaveSystem(Data<T> _data, SaveSystemConfig _config)
+        public SaveSystem(Data<T> _data, Config _config)
         {
             data = _data;
         }
