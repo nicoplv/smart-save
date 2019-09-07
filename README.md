@@ -45,7 +45,7 @@ You can change the type of save by modifying SmartSave/Resources/SmartSaveSettin
 - Set settings of the system like if if the file is write in binary, protected with a checksum, ...
 
 ## Advanced Usage
-When you create a save with a different config than the one on your settings, you just have to add a configuration when you create it
+You can create a save with a different config than the one on your settings, you just have to add a configuration when you create it
 ```C#
 MySaveClass mySaveClass = MySaveClass.Create("NameOfTheSaveFile", SmartSaves.SaveSystems.Config.ForPersistentDataPathFile<MySaveClass>(binary: true, checksum: true, shuffle: SmartSaves.SaveSystems.Config.PersistentDataPathFileShuffleTypes.Random));
 mySaveClass.Load();
