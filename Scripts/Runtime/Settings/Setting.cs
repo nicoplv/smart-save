@@ -42,9 +42,7 @@ namespace SmartSaves.Settings
         #region Consts
 
         private const string assetName = "SmartSaveSettings";
-        private const string assetPath = "SmartSave/Resources/" + assetName + ".asset";
-        private const string scriptName = "Settings";
-        private const string scriptPath = "SmartSave/Script/" + scriptName + ".cs";
+        private const string assetPath = "Resources/" + assetName + ".asset";
 
         #endregion
 
@@ -60,9 +58,6 @@ namespace SmartSaves.Settings
 #if UNITY_EDITOR
             public List<UnityEditor.BuildTarget> EditorBuildTargets = new List<BuildTarget>();
 #endif
-
-            // TODO Use that to select the active build target
-            //if(EditorUserBuildSettings.activeBuildTarget == BuildTarget.iOS)
 
             public SaveSystems.Types SaveSystemType = SaveSystems.Types.PersistentDataPathFile;
 
@@ -125,23 +120,8 @@ namespace SmartSaves.Settings
             // If no one found, create one
             if (!instance)
             {
-                // Search path
-                string assetFullPath = "";
-                string b_assetFullPath;
-                assetGUIDs = AssetDatabase.FindAssets(scriptName + " t:Script");
-                foreach (string iGUID in assetGUIDs)
-                {
-                    b_assetFullPath = AssetDatabase.GUIDToAssetPath(iGUID);
-                    if (b_assetFullPath.Contains(scriptPath))
-                    {
-                        assetFullPath = b_assetFullPath.Replace(scriptPath, assetPath);
-                        break;
-                    }
-                }
-
-                // In case don't find create at root
-                if (assetFullPath == "")
-                    assetFullPath = "Assets/" + assetPath;
+                // Create path
+                string assetFullPath = "Assets/" + assetPath;
 
                 // Create directory
                 string directoryPath = assetFullPath.Replace("/" + assetName + ".asset", "");

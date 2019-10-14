@@ -1,0 +1,17 @@
+{
+    "name": "NicoplvGames.SmartSave.Editor",
+    "references": [
+        "NicoplvGames.SmartSave",
+        "NicoplvGames.EditorFoundation.Editor"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": []
+}

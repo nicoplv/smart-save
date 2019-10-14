@@ -1,9 +1,9 @@
 {
-    "name": "Tests",
+    "name": "NicoplvGames.SmartSave.Tests",
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
-        "SmartSaves"
+        "NicoplvGames.SmartSave"
     ],
     "includePlatforms": [
         "Editor"
