@@ -1,0 +1,9 @@
+{
+	"name": "com.nicoplvgames.smart-save",
+	"displayName": "Smart Save",
+	"version": "0.0.1",
+	"description": "Simple save system for Unity3D",
+	"dependencies": {
+		"com.nicoplvgames.editor-foundation": "https://github.com/nicoplv/editor-foundation.git"
+	}
+}
